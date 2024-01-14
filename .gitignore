@@ -1,0 +1,11 @@
+*.iml
+__pycache__/
+.idea
+data
+*.ipynb
+build/
+*.html
+*.c
+*.cpp
+*.so
+*.sh
