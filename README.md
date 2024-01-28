@@ -1,6 +1,4 @@
 # TI-NBC Algorithm
-In progress...
-
 A Neighborhood-Based Clustering by Means of the Triangle Inequality.
 
 ## Installation (Linux)
