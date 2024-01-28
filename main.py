@@ -1,31 +1,42 @@
 from sklearn.metrics import adjusted_rand_score, v_measure_score
 
-from algorithm.nbc import TI_NBC
+from algorithm.get_algorithm import get_algorithm
+
 from util.args import parse_args
 from util.util import read_arff
 from visualization.visualize import visualize
 
+import time
 
-def score(y_true, y_pred, ds_name = None):
+
+def score(y_true, y_pred, args):
     s = adjusted_rand_score(y_true, y_pred)
-    print(f'Adjusted rand index for dataset {ds_name if ds_name is not None else ""} is', s)
+    print(f'Adjusted rand index for dataset {args.dataset_name if args.dataset_name is not None else ""} is', s)
     s = v_measure_score(y_true, y_pred)
-    print(f'V-measure score for dataset {ds_name if ds_name is not None else ""} is', s)
+    print(f'V-measure score for dataset {args.dataset_name if args.dataset_name is not None else ""} is', s)
     return s
 
 
-def process_dataset(path, name, save_plot, k):
-    X, Y = read_arff(path)
-    y_pred = TI_NBC(k).predict(X)
-    score(Y, y_pred, name)
-    visualize(X, Y, y_pred, save_plot)
+def predict(X, algorithm):
+    start = time.time()
+    Y = algorithm.fit_predict(X)
+    stop = time.time()
+    print("Time elapsed: ", stop - start)
+    return Y
 
 
-def fit_predict_score():
-    file, dataset_name, save_plot, k = parse_args()
-    dataset_name = dataset_name if dataset_name is not None else 'unknown'
-    process_dataset(file, dataset_name, save_plot, k)
+def process_dataset(algorithm, args):
+    X, Y = read_arff(args.dataset_file)
+    y_pred = predict(X, algorithm)
+    score(Y, y_pred, args)
+    visualize(X, Y, y_pred, args)
+
+
+def fit_predict_score(args):
+    algorithm = get_algorithm(args)
+    process_dataset(algorithm, args)
 
 
 if __name__ == '__main__':
-    fit_predict_score()
+    args = parse_args()
+    fit_predict_score(args)

@@ -15,7 +15,7 @@ class TI_NBC:
         self.k = k
 
 
-    def predict(self, X: np.ndarray) -> np.ndarray:
+    def fit_predict(self, X: np.ndarray) -> np.ndarray:
         """
         Performs the clustering and returns the predicted clusters for each point.
 
